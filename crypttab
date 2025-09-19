@@ -1,0 +1,2 @@
+# <target name>	<source device>		<key file>	<options>
+root            /dev/nvme0n1p5             none    x-systemd.device-timeout=30,tpm2-device=auto,tpm2-measure-pcr=yes
