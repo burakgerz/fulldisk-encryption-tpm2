@@ -1,7 +1,7 @@
 #!/bin/bash
 
-CRT_PATH='/secureboot/MOK/MOK.crt'
-KEY_PATH='/secureboot/MOK/MOK.key'
+KEY_PATH='/secureboot/priv_keys/db.key'
+CRT_PATH='/secureboot/priv_keys/db.crt'
 SYSTEMD_BOOT='/boot/efi/EFI/systemd/systemd-bootx64.efi'
 GRUB='/boot/efi/EFI/debian/grubx64.efi'
 
