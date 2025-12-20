@@ -1,7 +1,7 @@
 # Encrypted rootfs disk encryption key bound to TPM2 policy
 This setup uses dracut for generating UKI images, systemd-cryptenroll to enroll disk encryption key to TPM2 and systemd-crytsetup in initrd to decrypt and setup rootfs.
 An unencrypted filesystem EFI partition (FAT filesystem) is needed, where UKI images can reside.
-You need to install systemd-boot, dracut, sbsigntool, openssl, efitools
+You need to install systemd-boot, systemd-cryptsetup, dracut, sbsigntool, openssl, efitools
 
 ## Easy Setup
 If you dont load your own kernel modules, you can use this setup
