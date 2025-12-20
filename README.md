@@ -17,8 +17,11 @@ Copy generated efi_keys directory to FAT partition
 You must create a new UKI after Kernel or initrd update
 Copy dracut config to `/etc/dracut.d/`
 
-### Using crypttab in initramfs
-update and copy crypttab to `/etc/crypttab`
+### Add gpt rootfs type guid
+For x86 rootfs:
+sudo sgdisk --typecode=<partition>:4F68BCE3-E8CD-4DB1-96E7-FBCAF984B709 <block-dev>
+e.g. sudo sgdisk --typecode=2:4F68BCE3-E8CD-4DB1-96E7-FBCAF984B709 /dev/nvme0n1 
+systemd in initramfs will then automaticaly find the rootfs
 
 ### Enrolling key to a diskencryption tpm for rootfs encryption:
 `systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=7 --tpm2-pcrs=15:sha256=0000000000000000000000000000000000000000000000000000000000000000 <rootfs-block-dev>`  
@@ -65,6 +68,6 @@ For loading self build, self signed kernel modules:
 ```
 module_path=/lib...  
 unxz $module_path  
-/usr/src/linux-headers-$(uname-r)/scripts/sign-file sha256 /secureboot/priv_keys/db.key /secureboot/priv_keys/db.crt ${module_path%%.xz}  
+/usr/src/linux-headers-$(uname -r)/scripts/sign-file sha256 /secureboot/priv_keys/db.key /secureboot/priv_keys/db.crt ${module_path%%.xz}  
 xz --check=crc32 --lzma2=dict=512KiB "${module_path%%.xz}"
 ```
