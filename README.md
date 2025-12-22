@@ -17,11 +17,14 @@ Copy generated efi_keys directory to FAT partition
 You must create a new UKI after Kernel or initrd update
 Copy dracut config to `/etc/dracut.d/`
 
-### Add gpt rootfs type guid
-For x86 rootfs:
-sudo sgdisk --typecode=<partition>:4F68BCE3-E8CD-4DB1-96E7-FBCAF984B709 <block-dev>
-e.g. sudo sgdisk --typecode=2:4F68BCE3-E8CD-4DB1-96E7-FBCAF984B709 /dev/nvme0n1 
-systemd in initramfs will then automaticaly find the rootfs
+### Add gpt type guid
+To make use of systemd-gpt-auto-generator  
+For x86_64 rootfs:  
+`sudo sgdisk --typecode=<partition>:4F68BCE3-E8CD-4DB1-96E7-FBCAF984B709 <block-dev>`  
+e.g. `sudo sgdisk --typecode=2:4F68BCE3-E8CD-4DB1-96E7-FBCAF984B709 /dev/nvme0n1`  
+For EFI partition:  
+`sudo sgdisk --typecode=<partition>:C12A7328-F81F-11D2-BA4B-00A0C93EC93B <block-dev>`  
+These partition will be automounted by systemd, no fstab needed
 
 ### Enrolling key to a diskencryption tpm for rootfs encryption:
 `systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=7 --tpm2-pcrs=15:sha256=0000000000000000000000000000000000000000000000000000000000000000 <rootfs-block-dev>`  
@@ -50,7 +53,7 @@ UEFI Firmware -> shim -> MOK Manager -> systemd-boot -> UKI Image
 
 ### Replace grub
 You must copy systemd-boot to grubx64 (since shim only loads grub currently, there is PR in shim to extend this, but dont find it)
---> replace /boot/efi/EFI/debian/grubx64.efi with /boot/efi/EFI/systemd/systemd-bootx64.efi
+--> replace <efi-mount-point>/EFI/debian/grubx64.efi with <efi-mount-point>/EFI/systemd/systemd-bootx64.efi
 
 ### Sign shim and MOK Manager manually
 `sbsign --key <db.key> --cert <db.crt> <path-to-shim> --output <path-to-shim>`  
