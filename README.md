@@ -4,7 +4,8 @@ An unencrypted filesystem EFI partition (FAT filesystem) is needed, where UKI im
 You need to install systemd-boot, systemd-cryptsetup, dracut, sbsigntool, openssl, efitools
 
 ## Easy Setup
-If you dont load your own kernel modules, you can use this setup
+If you dont load your own kernel modules, you can use this setup.  
+Or if your kernel is build with CONFIG_INTEGRITY_PLATFORM_KEYRING=y, then you can use the .platform keyring which is provided by UEFI to the kernel to load your own kernel modules. Since we will enroll our own PK,KEK and DB certs, we can use the private part of DB to sign our modules. Otherise follow along the advanced setup to enroll your own certs with MOK manager.
 
 ### Boot flow:
 UEFI Firmware -> systemd-boot -> UKI Image
