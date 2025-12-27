@@ -5,21 +5,21 @@ You need to install systemd-boot, systemd-cryptsetup, dracut, sbsigntool, openss
 
 ## Easy Setup
 If you dont load your own kernel modules, you can use this setup.  
-Or if your kernel is build with CONFIG_INTEGRITY_PLATFORM_KEYRING=y, then you can use the .platform keyring which is provided by UEFI to the kernel to load your own kernel modules. Since we will enroll our own PK,KEK and DB certs, we can use the private part of DB to sign our modules. Otherise follow along the advanced setup to enroll your own certs with MOK manager.
+Or if your kernel is build with `CONFIG_INTEGRITY_PLATFORM_KEYRING=y`, then you can use the .platform keyring which is provided by UEFI to the kernel to load your own kernel modules. Since we will enroll our own PK,KEK and DB certs, we can use the private part of DB to sign our modules. Otherwise follow along the advanced setup to enroll your own certs with MOK manager.
 
 ### Boot flow:
 UEFI Firmware -> systemd-boot -> UKI Image
 
 ### Key creation
-Create secureboot keys, see `create-keys.sh`
+Create secureboot keys, see `create-keys.sh`  
 Copy generated efi_keys directory to FAT partition
 
 ### UKI image generation
-You must create a new UKI after Kernel or initrd update
-Copy dracut config to `/etc/dracut.d/`
+You must create a new UKI after Kernel or initrd is updated, cpopy the dracut config to `/etc/dracut.d/`
 
 ### Add gpt type guid
-To make use of systemd-gpt-auto-generator  
+systemd supports the [Discoverable Partitions Specification](https://uapi-group.org/specifications/specs/discoverable_partitions_specification/). 
+systemd-gpt-auto-generator implements that, to make use of it, we need to add the gpt guid type to the partitions accordingly:  
 For x86_64 rootfs:  
 `sudo sgdisk --typecode=<partition>:4F68BCE3-E8CD-4DB1-96E7-FBCAF984B709 <block-dev>`  
 e.g. `sudo sgdisk --typecode=2:4F68BCE3-E8CD-4DB1-96E7-FBCAF984B709 /dev/nvme0n1`  
